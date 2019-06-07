@@ -15,7 +15,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.wso2.carbon.identity.notification.mgt.email.internal;
 
 import org.apache.commons.logging.Log;
@@ -23,22 +22,26 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.identity.notification.mgt.NotificationSendingModule;
 import org.wso2.carbon.identity.notification.mgt.email.EmailSendingModule;
-
-/**
- * @scr.component name="carbon.identity.notification.mgt.email" immediate="true"
- */
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 @SuppressWarnings("unused")
+@Component(
+         name = "carbon.identity.notification.mgt.email", 
+         immediate = true)
 public class EmailMessageSendingServiceComponent {
 
     private static Log log = LogFactory.getLog(EmailMessageSendingServiceComponent.class);
 
+    @Activate
     protected void activate(ComponentContext ctxt) {
-
         try {
             // Registering email message sending module on user operation for entitlement component
-            ctxt.getBundleContext().registerService(NotificationSendingModule.class.getName(),
-                    new EmailSendingModule(), null);
+            ctxt.getBundleContext().registerService(NotificationSendingModule.class.getName(), new EmailSendingModule(), null);
             if (log.isDebugEnabled()) {
                 log.debug("Email notification sending module is activated");
             }
@@ -48,9 +51,11 @@ public class EmailMessageSendingServiceComponent {
         }
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext ctxt) {
         if (log.isDebugEnabled()) {
             log.debug("Email notification sending module is deactivated");
         }
     }
 }
+
